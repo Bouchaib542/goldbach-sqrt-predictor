@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Goldbach Pair Predictor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Goldbach Pair Predictor</h1>
+    <p>Enter a large even number (up to ~10<sup>18</sup>):</p>
+    <input type="text" id="evenInput" placeholder="Enter even number E" />
+    <button onclick="predictPair()">Predict (p, q)</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function isPrime(n) {
+      if (n < 2n) return false;
+      if (n === 2n || n === 3n) return true;
+      if (n % 2n === 0n || n % 3n === 0n) return false;
+      for (let i = 5n; i * i <= n; i += 6n) {
+        if (n % i === 0n || n % (i + 2n) === 0n) return false;
+      }
+      return true;
+    }
+
+    function predictPair() {
+      const input = document.getElementById("evenInput").value;
+      const E = BigInt(input);
+      const result = document.getElementById("result");
+
+      if (E % 2n !== 0n || E < 4n) {
+        result.textContent = "Please enter a valid even number ≥ 4.";
+        return;
+      }
+
+      const sqrtE = BigInt(Math.floor(Math.sqrt(Number(E))));
+      let delta = 0n;
+
+      while (sqrtE - delta > 1n) {
+        const p = sqrtE - delta;
+        const q = E - p;
+        if (isPrime(p) && isPrime(q)) {
+          result.textContent = `Goldbach pair: (${p}, ${q})`;
+          return;
+        }
+        const p2 = sqrtE + delta;
+        const q2 = E - p2;
+        if (isPrime(p2) && isPrime(q2)) {
+          result.textContent = `Goldbach pair: (${p2}, ${q2})`;
+          return;
+        }
+        delta += 1n;
+      }
+
+      result.textContent = "No prime pair found (unexpected).";
+    }
+  </script>
+</body>
+</html>
